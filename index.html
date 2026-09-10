@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한달 운동 챌린지</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --text: #1a1c1f;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --accent: #2563eb;
+    --accent-text: #ffffff;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --warn-bg: #fef3c7;
+    --empty-bg: #f1f2f4;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121316;
+      --card: #1c1e22;
+      --text: #f2f3f5;
+      --muted: #9aa0a8;
+      --border: #2c2f34;
+      --accent: #3b82f6;
+      --accent-text: #ffffff;
+      --success: #22c55e;
+      --success-bg: #123321;
+      --warn-bg: #3a2f0c;
+      --empty-bg: #24262b;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    padding: 24px 16px 60px;
+  }
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.4rem;
+    margin: 0 0 4px;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 20px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .plan-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .plan-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+  .plan-list li:last-child { border-bottom: none; }
+  .plan-list b { color: var(--accent); }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .btn-secondary {
+    padding: 10px 16px;
+    background: var(--empty-bg);
+    color: var(--text);
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .progress-header .day {
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .progress-header .date {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .bar-track {
+    height: 8px;
+    background: var(--empty-bg);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width .2s ease;
+  }
+  .bar-label {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .mission-title {
+    font-weight: 700;
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+  }
+  .mission-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background: var(--empty-bg);
+    margin-bottom: 8px;
+  }
+  .mission-item.done {
+    background: var(--success-bg);
+  }
+  .mission-item input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    accent-color: var(--success);
+  }
+  .mission-item .label {
+    flex: 1;
+    font-size: 0.95rem;
+  }
+  .mission-item.done .label {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+  .mission-item .emoji {
+    font-size: 1.3rem;
+  }
+  .all-done-badge {
+    display: inline-block;
+    background: var(--success-bg);
+    color: var(--success);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-top: 4px;
+  }
+  .calendar-title {
+    font-weight: 700;
+    margin: 0 0 12px;
+    font-size: 1rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+  .cell {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: var(--empty-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    border: 2px solid transparent;
+    position: relative;
+  }
+  .cell.future { opacity: 0.5; }
+  .cell.selectable { cursor: pointer; }
+  .cell.partial { background: var(--warn-bg); color: var(--text); }
+  .cell.complete { background: var(--success); color: #fff; font-weight: 700; }
+  .cell.today { border-color: var(--accent); }
+  .cell.selected { box-shadow: 0 0 0 2px var(--accent) inset; }
+  .legend {
+    display: flex;
+    gap: 14px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  .dot.empty { background: var(--empty-bg); border: 1px solid var(--border); }
+  .dot.partial { background: var(--warn-bg); }
+  .dot.complete { background: var(--success); }
+  .detail-panel-title {
+    font-weight: 700;
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+  .footer-actions {
+    text-align: center;
+    margin-top: 24px;
+  }
+  .congrats {
+    text-align: center;
+    padding: 12px 0;
+  }
+  .congrats .big {
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "workout-tracker-v1";
+  var TOTAL_DAYS = 30;
+
+  var ITEMS = [
+    { key: "squat", emoji: "🏋️" },
+    { key: "weights", emoji: "💪" },
+    { key: "pullup", emoji: "🧗" },
+    { key: "walk", emoji: "🚶" }
+  ];
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { startDate: null, checks: {} };
+      var parsed = JSON.parse(raw);
+      if (!parsed.checks) parsed.checks = {};
+      return parsed;
+    } catch (e) {
+      return { startDate: null, checks: {} };
+    }
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  var state = loadState();
+  var selectedDay = null;
+
+  function todayISO() {
+    var d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+  function dateForDay(dayNum) {
+    var start = new Date(state.startDate + "T00:00:00");
+    start.setDate(start.getDate() + (dayNum - 1));
+    return start;
+  }
+
+  function formatDate(d) {
+    var days = ["일", "월", "화", "수", "목", "금", "토"];
+    return (d.getMonth() + 1) + "월 " + d.getDate() + "일 (" + days[d.getDay()] + ")";
+  }
+
+  function getCurrentDayNumber() {
+    if (!state.startDate) return 0;
+    var start = new Date(state.startDate + "T00:00:00");
+    var now = new Date(todayISO() + "T00:00:00");
+    var diffDays = Math.round((now - start) / 86400000) + 1;
+    if (diffDays < 1) diffDays = 1;
+    return diffDays;
+  }
+
+  function getMission(dayNum) {
+    var stage = Math.floor((dayNum - 1) / 3);
+    return {
+      squatCount: 30 + stage * 5,
+      weightsMin: 5,
+      pullupSec: 10 + stage * 5,
+      pullupSets: 3,
+      walkSteps: 7000
+    };
+  }
+
+  function missionLabels(dayNum) {
+    var m = getMission(dayNum);
+    var o = {};
+    o.squat = "스쿼트 " + m.squatCount + "개";
+    o.weights = "덤벨 · 케틀벨 운동 " + m.weightsMin + "분";
+    o.pullup = "철봉 매달리기 " + m.pullupSec + "초 × " + m.pullupSets + "회";
+    o.walk = "칠천보 걷기 (" + m.walkSteps.toLocaleString() + "보)";
+    return o;
+  }
+
+  function getDayChecks(dayNum) {
+    var key = String(dayNum);
+    if (!state.checks[key]) {
+      state.checks[key] = { squat: false, weights: false, pullup: false, walk: false };
+    }
+    return state.checks[key];
+  }
+
+  function countChecked(dayNum) {
+    var c = state.checks[String(dayNum)];
+    if (!c) return 0;
+    var n = 0;
+    ITEMS.forEach(function (it) { if (c[it.key]) n++; });
+    return n;
+  }
+
+  function totalCompletedDays() {
+    var n = 0;
+    for (var d = 1; d <= TOTAL_DAYS; d++) {
+      if (countChecked(d) === ITEMS.length) n++;
+    }
+    return n;
+  }
+
+  function toggleCheck(dayNum, itemKey) {
+    var c = getDayChecks(dayNum);
+    c[itemKey] = !c[itemKey];
+    saveState();
+    render();
+  }
+
+  function startChallenge() {
+    state = { startDate: todayISO(), checks: {} };
+    selectedDay = 1;
+    saveState();
+    render();
+  }
+
+  function restartChallenge() {
+    if (!confirm("정말 처음부터 다시 시작할까요? 지금까지의 체크 기록이 모두 사라집니다.")) return;
+    state = { startDate: null, checks: {} };
+    selectedDay = null;
+    saveState();
+    render();
+  }
+
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (k) {
+        if (k === "class") e.className = attrs[k];
+        else if (k === "text") e.textContent = attrs[k];
+        else if (k.indexOf("on") === 0) e.addEventListener(k.slice(2), attrs[k]);
+        else e.setAttribute(k, attrs[k]);
+      });
+    }
+    (children || []).forEach(function (c) { if (c) e.appendChild(c); });
+    return e;
+  }
+
+  function renderStartView(root) {
+    root.appendChild(el("h1", { text: "한달 운동 챌린지" }));
+    root.appendChild(el("p", { class: "sub", text: "30일간 꾸준히 실천하고 체크해보세요." }));
+
+    var planItems = [
+      "스쿼트 30개 (3일마다 5개씩 증가)",
+      "덤벨 · 케틀벨 운동 5분",
+      "철봉 매달리기 10초 × 3회 (3일마다 5초씩 증가)",
+      "칠천보 걷기"
+    ];
+    var list = el("ul", { class: "plan-list" });
+    planItems.forEach(function (t) {
+      list.appendChild(el("li", { text: t }));
+    });
+
+    var card = el("div", { class: "card" }, [
+      el("div", { class: "mission-title", text: "한달 운동 플랜" }),
+      list
+    ]);
+    root.appendChild(card);
+
+    var startBtn = el("button", { class: "btn-primary", text: "시작하기", onclick: startChallenge });
+    root.appendChild(el("div", { class: "card" }, [startBtn]));
+  }
+
+  function renderCompleteView(root) {
+    root.appendChild(el("h1", { text: "한달 운동 챌린지" }));
+    var completed = totalCompletedDays();
+    var card = el("div", { class: "card congrats" }, [
+      el("div", { class: "big", text: "🎉" }),
+      el("div", { text: "30일 챌린지 완료!" }),
+      el("p", { class: "sub", text: "30일 중 " + completed + "일을 완벽하게 실천했어요." })
+    ]);
+    root.appendChild(card);
+    root.appendChild(renderCalendarCard(TOTAL_DAYS));
+    var restartBtn = el("button", { class: "btn-primary", text: "새로운 챌린지 다시 시작", onclick: restartChallenge });
+    root.appendChild(el("div", { class: "card" }, [restartBtn]));
+  }
+
+  function renderMissionCard(dayNum, currentDayNum) {
+    var labels = missionLabels(dayNum);
+    var checks = getDayChecks(dayNum);
+    var doneCount = countChecked(dayNum);
+    var isEditable = dayNum <= currentDayNum;
+
+    var title = dayNum === currentDayNum
+      ? "오늘의 미션"
+      : (dayNum + "일차 미션 (기록 수정)");
+
+    var header = el("div", { class: "detail-panel-title", text: title });
+    var box = el("div", {}, [header]);
+
+    ITEMS.forEach(function (it) {
+      var isDone = !!checks[it.key];
+      var item = el("label", { class: "mission-item" + (isDone ? " done" : "") }, [
+        (function () {
+          var cb = el("input", { type: "checkbox" });
+          cb.checked = isDone;
+          if (!isEditable) cb.disabled = true;
+          cb.addEventListener("change", function () { toggleCheck(dayNum, it.key); });
+          return cb;
+        })(),
+        el("span", { class: "emoji", text: it.emoji }),
+        el("span", { class: "label", text: labels[it.key] })
+      ]);
+      box.appendChild(item);
+    });
+
+    if (doneCount === ITEMS.length) {
+      box.appendChild(el("span", { class: "all-done-badge", text: "오늘 완료! 잘하셨어요 👏" }));
+    }
+
+    return el("div", { class: "card" }, [box]);
+  }
+
+  function renderCalendarCard(currentDayNum) {
+    var card = el("div", { class: "card" });
+    card.appendChild(el("div", { class: "calendar-title", text: "이번 달 진행 상황" }));
+
+    var grid = el("div", { class: "grid" });
+    for (var d = 1; d <= TOTAL_DAYS; d++) {
+      var checked = countChecked(d);
+      var cls = "cell";
+      if (d > currentDayNum) {
+        cls += " future";
+      } else {
+        cls += " selectable";
+        if (checked === ITEMS.length) cls += " complete";
+        else if (checked > 0) cls += " partial";
+      }
+      if (d === currentDayNum) cls += " today";
+      if (d === selectedDay) cls += " selected";
+
+      var cell = el("div", { class: cls, text: String(d) });
+      if (d <= currentDayNum) {
+        cell.addEventListener("click", function (dayNum) {
+          return function () {
+            selectedDay = dayNum;
+            render();
+          };
+        }(d));
+      }
+      grid.appendChild(cell);
+    }
+    card.appendChild(grid);
+
+    var legend = el("div", { class: "legend" }, [
+      el("span", {}, [el("span", { class: "dot empty" }), document.createTextNode("미완료")]),
+      el("span", {}, [el("span", { class: "dot partial" }), document.createTextNode("일부 완료")]),
+      el("span", {}, [el("span", { class: "dot complete" }), document.createTextNode("전체 완료")])
+    ]);
+    card.appendChild(legend);
+
+    return card;
+  }
+
+  function renderDashboard(root, currentDayNum) {
+    root.appendChild(el("h1", { text: "한달 운동 챌린지" }));
+
+    var progressCard = el("div", { class: "card" });
+    var d = dateForDay(currentDayNum);
+    progressCard.appendChild(el("div", { class: "progress-header" }, [
+      el("div", { class: "day", text: currentDayNum + "일차 / " + TOTAL_DAYS + "일" }),
+      el("div", { class: "date", text: formatDate(d) })
+    ]));
+    var pct = Math.round((currentDayNum - 1) / TOTAL_DAYS * 100);
+    var track = el("div", { class: "bar-track" }, [
+      el("div", { class: "bar-fill", style: "width:" + pct + "%" })
+    ]);
+    progressCard.appendChild(track);
+    progressCard.appendChild(el("div", {
+      class: "bar-label",
+      text: totalCompletedDays() + "일 완벽 실천 · " + pct + "% 진행"
+    }));
+    root.appendChild(progressCard);
+
+    var dayToShow = selectedDay && selectedDay <= currentDayNum ? selectedDay : currentDayNum;
+    root.appendChild(renderMissionCard(dayToShow, currentDayNum));
+    root.appendChild(renderCalendarCard(currentDayNum));
+
+    var footer = el("div", { class: "footer-actions" }, [
+      el("button", { class: "btn-secondary", text: "처음부터 다시 시작", onclick: restartChallenge })
+    ]);
+    root.appendChild(footer);
+  }
+
+  function render() {
+    var root = document.getElementById("app");
+    root.innerHTML = "";
+
+    if (!state.startDate) {
+      renderStartView(root);
+      return;
+    }
+
+    var currentDayNum = getCurrentDayNumber();
+    if (currentDayNum > TOTAL_DAYS) {
+      renderCompleteView(root);
+      return;
+    }
+
+    if (selectedDay === null) selectedDay = currentDayNum;
+    renderDashboard(root, currentDayNum);
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
