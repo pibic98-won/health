@@ -10,10 +10,11 @@
 <meta name="theme-color" content="#241a5e">
 <style>
   :root {
-    --card: #ffffff;
-    --card-text: #17123a;
-    --card-muted: #716c8c;
-    --card-border: #efedf7;
+    --card: linear-gradient(160deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
+    --card-border-color: rgba(255,255,255,0.12);
+    --card-text: #ffffff;
+    --card-muted: rgba(255,255,255,0.6);
+    --card-border: rgba(255,255,255,0.12);
     --on-dark: #ffffff;
     --on-dark-muted: rgba(255,255,255,0.68);
     --glass: rgba(255,255,255,0.1);
@@ -48,6 +49,9 @@
     margin-bottom: 18px;
   }
   .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-weight: 800;
     font-size: 1.05rem;
     letter-spacing: -0.01em;
@@ -80,9 +84,11 @@
     line-height: 1.5;
   }
 
-  /* ---------- white cards ---------- */
+  /* ---------- glass cards ---------- */
   .card-light {
     background: var(--card);
+    border: 1px solid var(--card-border-color);
+    backdrop-filter: blur(16px);
     color: var(--card-text);
     border-radius: 22px;
     padding: 20px;
@@ -96,6 +102,7 @@
     color: var(--on-dark);
   }
   .section-title.on-card { color: var(--card-text); }
+  .icon-ui { display: inline-flex; flex-shrink: 0; }
 
   .plan-list { list-style: none; padding: 0; margin: 0; }
   .plan-list li {
@@ -174,7 +181,7 @@
     background: var(--flame-grad);
     box-shadow: 0 14px 30px rgba(255, 70, 90, 0.35);
   }
-  .streak-banner .flame-big { font-size: 1.9rem; }
+  .streak-banner .flame-big { display: flex; flex-shrink: 0; color: #fff; }
   .streak-banner .title { font-weight: 800; font-size: 1.02rem; }
   .streak-banner .sub { font-size: 0.8rem; opacity: 0.92; margin-top: 2px; }
 
@@ -215,14 +222,12 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    border: 2px solid var(--card-border);
+    border: 2px solid rgba(255,255,255,0.22);
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     color: transparent;
-    font-size: 0.85rem;
-    font-weight: 900;
     transition: all .15s ease;
   }
   .mission-row.done .mission-check {
@@ -242,9 +247,13 @@
 
   .all-done-banner {
     margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     text-align: center;
-    background: #eafbf1;
-    color: #16a34a;
+    background: rgba(34,197,94,0.16);
+    color: #4ade80;
     font-weight: 700;
     font-size: 0.85rem;
     padding: 10px;
@@ -277,7 +286,7 @@
   .cell {
     aspect-ratio: 1;
     border-radius: 10px;
-    background: #f4f2fb;
+    background: rgba(255,255,255,0.07);
     color: var(--card-muted);
     display: flex;
     align-items: center;
@@ -287,17 +296,17 @@
     border: 2px solid transparent;
     position: relative;
   }
-  .cell.future { opacity: 0.45; }
+  .cell.future { opacity: 0.4; }
   .cell.selectable { cursor: pointer; }
-  .cell.partial { background: #fff1d6; color: #8a5a00; }
+  .cell.partial { background: rgba(255,209,61,0.2); color: #ffd23d; }
   .cell.complete {
     background: var(--flame-grad);
     color: #fff;
     font-weight: 800;
     box-shadow: 0 6px 14px rgba(255,90,90,0.35);
   }
-  .cell.today { border-color: #7657d6; }
-  .cell.selected { box-shadow: 0 0 0 2px #7657d6 inset; }
+  .cell.today { border-color: #a78bfa; }
+  .cell.selected { box-shadow: 0 0 0 2px #a78bfa inset; }
   .legend {
     display: flex;
     gap: 14px;
@@ -308,8 +317,8 @@
   }
   .legend span { display: inline-flex; align-items: center; gap: 5px; }
   .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
-  .dot.empty { background: #f4f2fb; border: 1px solid var(--card-border); }
-  .dot.partial { background: #fff1d6; }
+  .dot.empty { background: rgba(255,255,255,0.07); border: 1px solid var(--card-border); }
+  .dot.partial { background: rgba(255,209,61,0.2); }
   .dot.complete { background: var(--flame-grad); }
 
   .detail-panel-title {
@@ -320,7 +329,7 @@
   }
 
   .congrats { text-align: center; padding: 10px 0 4px; }
-  .congrats .big { font-size: 2.6rem; margin-bottom: 10px; }
+  .congrats .big { display: flex; justify-content: center; margin-bottom: 10px; color: #ffd23d; }
   .congrats .headline { font-size: 1.1rem; font-weight: 800; }
   .congrats .sub { color: var(--card-muted); font-size: 0.88rem; margin-top: 6px; }
 
@@ -338,10 +347,10 @@
   var SVG_NS = "http://www.w3.org/2000/svg";
 
   var ITEMS = [
-    { key: "squat", emoji: "🏋️", iconClass: "squat" },
-    { key: "weights", emoji: "💪", iconClass: "weights" },
-    { key: "pullup", emoji: "🧗", iconClass: "pullup" },
-    { key: "walk", emoji: "🚶", iconClass: "walk" }
+    { key: "squat", iconClass: "squat" },
+    { key: "weights", iconClass: "weights" },
+    { key: "pullup", iconClass: "pullup" },
+    { key: "walk", iconClass: "walk" }
   ];
 
   function loadState() {
@@ -491,6 +500,73 @@
     return e;
   }
 
+  var ICON_PATHS = {
+    squat: [ // barbell
+      { tag: "line", attrs: { x1: 3, y1: 12, x2: 21, y2: 12 } },
+      { tag: "rect", attrs: { x: 1.5, y: 8, width: 3, height: 8, rx: 1, fill: "currentColor", stroke: "none" } },
+      { tag: "rect", attrs: { x: 19.5, y: 8, width: 3, height: 8, rx: 1, fill: "currentColor", stroke: "none" } },
+      { tag: "rect", attrs: { x: 6, y: 9.3, width: 2.2, height: 5.4, rx: 0.6, fill: "currentColor", stroke: "none" } },
+      { tag: "rect", attrs: { x: 15.8, y: 9.3, width: 2.2, height: 5.4, rx: 0.6, fill: "currentColor", stroke: "none" } }
+    ],
+    weights: [ // dumbbell
+      { tag: "circle", attrs: { cx: 5, cy: 12, r: 3 } },
+      { tag: "circle", attrs: { cx: 19, cy: 12, r: 3 } },
+      { tag: "line", attrs: { x1: 8, y1: 12, x2: 16, y2: 12 } }
+    ],
+    pullup: [ // bar on two posts
+      { tag: "line", attrs: { x1: 4, y1: 6, x2: 20, y2: 6 } },
+      { tag: "line", attrs: { x1: 6, y1: 6, x2: 6, y2: 19 } },
+      { tag: "line", attrs: { x1: 18, y1: 6, x2: 18, y2: 19 } }
+    ],
+    walk: [ // footprints
+      { tag: "ellipse", attrs: { cx: 8, cy: 8, rx: 2.4, ry: 3.4, transform: "rotate(-12 8 8)" } },
+      { tag: "ellipse", attrs: { cx: 15.6, cy: 16, rx: 2.4, ry: 3.4, transform: "rotate(10 15.6 16)" } }
+    ],
+    home: [
+      { tag: "path", attrs: { d: "M4 11.5L12 4l8 7.5" } },
+      { tag: "path", attrs: { d: "M6 10.5V20h12v-9.5" } }
+    ],
+    calendar: [
+      { tag: "rect", attrs: { x: 4, y: 5, width: 16, height: 15, rx: 2 } },
+      { tag: "line", attrs: { x1: 4, y1: 9.5, x2: 20, y2: 9.5 } },
+      { tag: "line", attrs: { x1: 8, y1: 3, x2: 8, y2: 7 } },
+      { tag: "line", attrs: { x1: 16, y1: 3, x2: 16, y2: 7 } }
+    ],
+    dumbbell: [
+      { tag: "circle", attrs: { cx: 5, cy: 12, r: 2.6 } },
+      { tag: "circle", attrs: { cx: 19, cy: 12, r: 2.6 } },
+      { tag: "line", attrs: { x1: 7.5, y1: 12, x2: 16.5, y2: 12 } }
+    ],
+    flame: [
+      { tag: "path", attrs: { d: "M17.66 18.66A8 8 0 0 1 6.34 7.34C7 9 9 10 9 10c0-2 .5-5 3-7 2 2 4.1 2.8 5.66 4.34A7.97 7.97 0 0 1 20 13a7.97 7.97 0 0 1-2.34 5.66z" } },
+      { tag: "path", attrs: { d: "M9.88 16.12A3 3 0 1 0 12.01 11L11 14H9c0 .77.29 1.54.88 2.12z" } }
+    ],
+    check: [
+      { tag: "polyline", attrs: { points: "4,12.5 9,17.5 20,5.5" } }
+    ],
+    star: [
+      { tag: "polygon", attrs: { points: "12,2.5 14.8,8.7 21.6,9.5 16.6,14.1 18,20.8 12,17.3 6,20.8 7.4,14.1 2.4,9.5 9.2,8.7" } }
+    ]
+  };
+
+  function icon(name, opts) {
+    opts = opts || {};
+    var size = opts.size || 22;
+    var svg = svgEl("svg", {
+      width: size, height: size, viewBox: "0 0 24 24",
+      fill: opts.filled ? "currentColor" : "none",
+      stroke: "currentColor",
+      "stroke-width": opts.strokeWidth || 1.8,
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      class: "icon-ui"
+    });
+    (ICON_PATHS[name] || []).forEach(function (spec) {
+      svg.appendChild(svgEl(spec.tag, spec.attrs));
+    });
+    return svg;
+  }
+
   function buildRing(fraction) {
     var size = 180, stroke = 14, r = (size - stroke) / 2, c = size / 2;
     var circumference = 2 * Math.PI * r;
@@ -526,15 +602,20 @@
     var right = null;
     if (showToggle) {
       var goingTo = activeTab === "home" ? "calendar" : "home";
-      var label = activeTab === "home" ? "📅 기록" : "🏠 홈";
+      var label = activeTab === "home" ? "기록" : "홈";
       right = el("button", {
         class: "nav-toggle-btn",
-        text: label,
         onclick: function () { activeTab = goingTo; render(); }
-      });
+      }, [
+        icon(goingTo === "calendar" ? "calendar" : "home", { size: 16 }),
+        document.createTextNode(label)
+      ]);
     }
     return el("div", { class: "topbar" }, [
-      el("div", { class: "brand", text: "💪 한달 챌린지" }),
+      el("div", { class: "brand" }, [
+        icon("dumbbell", { size: 18 }),
+        document.createTextNode("한달 챌린지")
+      ]),
       right
     ]);
   }
@@ -544,14 +625,14 @@
     root.appendChild(el("p", { class: "hero-sub", text: "30일간 꾸준히 실천하고 체크해보세요." }));
 
     var plan = [
-      { ico: "🏋️", cls: "squat", text: "스쿼트 30개 (3일마다 5개씩 증가)" },
-      { ico: "💪", cls: "weights", text: "덤벨 · 케틀벨 운동 5분" },
-      { ico: "🧗", cls: "pullup", text: "철봉 매달리기 10초 × 3회 (3일마다 5초씩 증가)" },
-      { ico: "🚶", cls: "walk", text: "칠천보 걷기" }
+      { name: "squat", cls: "squat", text: "스쿼트 30개 (3일마다 5개씩 증가)" },
+      { name: "weights", cls: "weights", text: "덤벨 · 케틀벨 운동 5분" },
+      { name: "pullup", cls: "pullup", text: "철봉 매달리기 10초 × 3회 (3일마다 5초씩 증가)" },
+      { name: "walk", cls: "walk", text: "칠천보 걷기" }
     ];
     var list = el("ul", { class: "plan-list" });
     plan.forEach(function (p) {
-      var icoWrap = el("span", { class: "ico mission-ico " + p.cls, text: p.ico });
+      var icoWrap = el("span", { class: "ico mission-ico " + p.cls }, [icon(p.name, { size: 18 })]);
       list.appendChild(el("li", {}, [icoWrap, el("span", { text: p.text })]));
     });
 
@@ -567,7 +648,7 @@
     root.appendChild(renderTopBar(false));
     var completed = totalCompletedDays();
     root.appendChild(el("div", { class: "card-light congrats" }, [
-      el("div", { class: "big", text: "🎉" }),
+      el("div", { class: "big" }, [icon("star", { size: 48, filled: true })]),
       el("div", { class: "headline", text: "30일 챌린지 완료!" }),
       el("p", { class: "sub", text: "30일 중 " + completed + "일을 완벽하게 실천했어요." })
     ]));
@@ -583,11 +664,11 @@
     cb.addEventListener("change", function () { toggleCheck(dayNum, it.key); });
 
     var label = el("label", { class: "hit" }, [
-      el("span", { class: "mission-ico " + it.iconClass, text: it.emoji }),
+      el("span", { class: "mission-ico " + it.iconClass }, [icon(it.key, { size: 20 })]),
       el("span", { class: "mission-text" }, [
         el("span", { class: "label", text: labels[it.key] })
       ]),
-      el("span", { class: "mission-check", text: "✓" })
+      el("span", { class: "mission-check" }, [icon("check", { size: 15, strokeWidth: 2.6 })])
     ]);
     label.insertBefore(cb, label.firstChild);
 
@@ -608,7 +689,10 @@
     });
 
     if (doneCount === ITEMS.length) {
-      box.appendChild(el("div", { class: "all-done-banner", text: "오늘 완료! 잘하셨어요 👏" }));
+      box.appendChild(el("div", { class: "all-done-banner" }, [
+        icon("check", { size: 14, strokeWidth: 2.6 }),
+        document.createTextNode("오늘 완료! 잘하셨어요")
+      ]));
     }
 
     return el("div", { class: "card-light" }, [box]);
@@ -677,7 +761,7 @@
     var streak = getStreak(done === ITEMS.length ? currentDayNum : currentDayNum - 1);
     if (streak > 0) {
       root.appendChild(el("div", { class: "streak-banner" }, [
-        el("span", { class: "flame-big", text: "🔥" }),
+        el("span", { class: "flame-big" }, [icon("flame", { size: 28, strokeWidth: 1.6 })]),
         el("div", {}, [
           el("div", { class: "title", text: streak + "일 연속 완료!" }),
           el("div", { class: "sub", text: "이 기세로 계속 가봐요" })
