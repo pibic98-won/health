@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>한달 운동 챌린지</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="manifest" href="manifest.json">
@@ -35,7 +35,7 @@
     background: radial-gradient(130% 70% at 8% -10%, #3c2f96 0%, #2a2177 42%, #160f3d 100%);
     color: var(--on-dark);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-    padding: 20px 16px calc(var(--nav-h) + 28px);
+    padding: 20px 16px calc(var(--nav-h) + 36px + env(safe-area-inset-bottom));
   }
   .wrap {
     max-width: 420px;
@@ -334,10 +334,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: var(--nav-h);
     display: flex;
     justify-content: center;
-    padding: 0 16px calc(10px + env(safe-area-inset-bottom));
+    padding: 0 16px calc(14px + env(safe-area-inset-bottom));
     pointer-events: none;
   }
   .bottom-nav-inner {
