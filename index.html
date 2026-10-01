@@ -7,243 +7,367 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#2563eb">
+<meta name="theme-color" content="#241a5e">
 <style>
   :root {
-    --bg: #f5f6f8;
     --card: #ffffff;
-    --text: #1a1c1f;
-    --muted: #6b7280;
-    --border: #e5e7eb;
-    --accent: #2563eb;
-    --accent-text: #ffffff;
-    --success: #16a34a;
-    --success-bg: #dcfce7;
-    --warn-bg: #fef3c7;
-    --empty-bg: #f1f2f4;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --card-text: #17123a;
+    --card-muted: #716c8c;
+    --card-border: #efedf7;
+    --on-dark: #ffffff;
+    --on-dark-muted: rgba(255,255,255,0.68);
+    --on-dark-faint: rgba(255,255,255,0.4);
+    --glass: rgba(255,255,255,0.1);
+    --glass-border: rgba(255,255,255,0.16);
+    --flame-grad: linear-gradient(135deg, #ff9d4d 0%, #ff5d6e 55%, #ff3d9e 100%);
+    --cool-grad: linear-gradient(135deg, #5a7bff 0%, #6a4fe0 100%);
+    --gold-grad: linear-gradient(135deg, #ffd23d 0%, #ff9d4d 100%);
+    --pink-grad: linear-gradient(135deg, #ff6fd8 0%, #ff3d9e 100%);
+    --ring-track: rgba(255,255,255,0.16);
+    --shadow-card: 0 12px 28px rgba(15, 8, 55, 0.35);
+    --nav-h: 76px;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #121316;
-      --card: #1c1e22;
-      --text: #f2f3f5;
-      --muted: #9aa0a8;
-      --border: #2c2f34;
-      --accent: #3b82f6;
-      --accent-text: #ffffff;
-      --success: #22c55e;
-      --success-bg: #123321;
-      --warn-bg: #3a2f0c;
-      --empty-bg: #24262b;
-      --shadow: 0 1px 3px rgba(0,0,0,0.4);
-    }
-  }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
+    min-height: 100vh;
+    background: radial-gradient(130% 70% at 8% -10%, #3c2f96 0%, #2a2177 42%, #160f3d 100%);
+    color: var(--on-dark);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-    padding: 24px 16px 60px;
+    padding: 20px 16px calc(var(--nav-h) + 28px);
   }
   .wrap {
-    max-width: 560px;
+    max-width: 420px;
     margin: 0 auto;
   }
-  h1 {
-    font-size: 1.4rem;
-    margin: 0 0 4px;
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
   }
-  .sub {
-    color: var(--muted);
-    font-size: 0.9rem;
-    margin: 0 0 20px;
+  .brand {
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
   }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow);
+  .streak-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 7px 13px 7px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    backdrop-filter: blur(6px);
   }
-  .plan-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .plan-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
+  .streak-chip .flame {
+    filter: drop-shadow(0 0 6px rgba(255,120,70,0.85));
     font-size: 0.95rem;
   }
-  .plan-list li:last-child { border-bottom: none; }
-  .plan-list b { color: var(--accent); }
-  button {
-    font-family: inherit;
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
+
+  h1.hero-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 4px 0 6px;
+    letter-spacing: -0.01em;
   }
-  .btn-primary {
-    width: 100%;
-    padding: 14px;
-    background: var(--accent);
-    color: var(--accent-text);
-    font-size: 1.05rem;
-    font-weight: 600;
+  .hero-sub {
+    color: var(--on-dark-muted);
+    font-size: 0.92rem;
+    margin: 0 0 20px;
+    line-height: 1.5;
   }
-  .btn-secondary {
-    padding: 10px 16px;
-    background: var(--empty-bg);
-    color: var(--text);
-    font-size: 0.85rem;
-    border: 1px solid var(--border);
+
+  /* ---------- white cards ---------- */
+  .card-light {
+    background: var(--card);
+    color: var(--card-text);
+    border-radius: 22px;
+    padding: 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-card);
   }
-  .progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 8px;
-  }
-  .progress-header .day {
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
-  .progress-header .date {
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-  .bar-track {
-    height: 8px;
-    background: var(--empty-bg);
-    border-radius: 999px;
-    overflow: hidden;
-    margin-bottom: 4px;
-  }
-  .bar-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 999px;
-    transition: width .2s ease;
-  }
-  .bar-label {
-    color: var(--muted);
-    font-size: 0.8rem;
-  }
-  .mission-title {
-    font-weight: 700;
+  .section-title {
+    font-weight: 800;
+    font-size: 1rem;
     margin: 0 0 12px;
-    font-size: 1.05rem;
+    color: var(--on-dark);
   }
-  .mission-item {
+  .section-title.on-card { color: var(--card-text); }
+
+  .plan-list { list-style: none; padding: 0; margin: 0; }
+  .plan-list li {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px;
-    border-radius: 10px;
-    background: var(--empty-bg);
-    margin-bottom: 8px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 0.93rem;
   }
-  .mission-item.done {
-    background: var(--success-bg);
-  }
-  .mission-item input[type="checkbox"] {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
-    accent-color: var(--success);
-  }
-  .mission-item .label {
-    flex: 1;
-    font-size: 0.95rem;
-  }
-  .mission-item.done .label {
-    text-decoration: line-through;
-    color: var(--muted);
-  }
-  .mission-item .emoji {
-    font-size: 1.3rem;
-  }
-  .all-done-badge {
-    display: inline-block;
-    background: var(--success-bg);
-    color: var(--success);
-    font-weight: 600;
-    font-size: 0.85rem;
-    padding: 6px 12px;
-    border-radius: 999px;
-    margin-top: 4px;
-  }
-  .calendar-title {
-    font-weight: 700;
-    margin: 0 0 12px;
-    font-size: 1rem;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-  }
-  .cell {
-    aspect-ratio: 1;
-    border-radius: 8px;
-    background: var(--empty-bg);
+  .plan-list li:last-child { border-bottom: none; }
+  .plan-list .ico {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8rem;
-    color: var(--muted);
+    font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+
+  /* ---------- buttons ---------- */
+  button { font-family: inherit; cursor: pointer; border: none; }
+  .btn-cta {
+    width: 100%;
+    padding: 16px;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #241a5e;
+    font-size: 1.02rem;
+    font-weight: 800;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  }
+  .btn-ghost {
+    width: 100%;
+    padding: 13px;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--on-dark);
+    font-size: 0.88rem;
+    font-weight: 700;
+  }
+
+  /* ---------- progress ring ---------- */
+  .ring-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px 28px;
+    text-align: center;
+  }
+  .ring-wrap { position: relative; width: 180px; height: 180px; }
+  .ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .ring-value { font-size: 2.3rem; font-weight: 800; line-height: 1; color: var(--on-dark); }
+  .ring-caption { font-size: 0.8rem; color: var(--on-dark-muted); margin-top: 6px; font-weight: 600;}
+  .ring-daylabel { font-weight: 800; font-size: 1rem; margin-top: 18px; color: var(--on-dark); }
+  .ring-date { color: var(--on-dark-muted); font-size: 0.84rem; margin-top: 2px; }
+
+  /* ---------- streak banner ---------- */
+  .streak-banner {
+    border-radius: 22px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--flame-grad);
+    box-shadow: 0 14px 30px rgba(255, 70, 90, 0.35);
+  }
+  .streak-banner .flame-big { font-size: 1.9rem; }
+  .streak-banner .title { font-weight: 800; font-size: 1.02rem; }
+  .streak-banner .sub { font-size: 0.8rem; opacity: 0.92; margin-top: 2px; }
+
+  /* ---------- mission items ---------- */
+  .mission-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 6px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .mission-row:last-of-type { border-bottom: none; }
+  .mission-ico {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .mission-ico.squat { background: var(--flame-grad); }
+  .mission-ico.weights { background: var(--pink-grad); }
+  .mission-ico.pullup { background: var(--cool-grad); }
+  .mission-ico.walk { background: var(--gold-grad); }
+  .mission-text { flex: 1; min-width: 0; }
+  .mission-text .label {
+    font-size: 0.93rem;
+    font-weight: 700;
+  }
+  .mission-row.done .mission-text .label {
+    color: var(--card-muted);
+    text-decoration: line-through;
+  }
+  .mission-check {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--card-border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    font-size: 0.85rem;
+    font-weight: 900;
+    transition: all .15s ease;
+  }
+  .mission-row.done .mission-check {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border-color: transparent;
+    color: #fff;
+  }
+  .mission-row input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+  .mission-row label.hit {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    width: 100%;
+    cursor: pointer;
+  }
+  .mission-row.disabled label.hit { cursor: default; opacity: 0.55; }
+
+  .all-done-banner {
+    margin-top: 10px;
+    text-align: center;
+    background: #eafbf1;
+    color: #16a34a;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  /* ---------- stats row ---------- */
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-chip {
+    flex: 1;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 14px;
+    backdrop-filter: blur(6px);
+  }
+  .stat-chip .num { font-size: 1.3rem; font-weight: 800; }
+  .stat-chip .lbl { font-size: 0.76rem; color: var(--on-dark-muted); margin-top: 2px; }
+
+  /* ---------- calendar ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 7px;
+  }
+  .cell {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    background: #f4f2fb;
+    color: var(--card-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 600;
     border: 2px solid transparent;
     position: relative;
   }
-  .cell.future { opacity: 0.5; }
+  .cell.future { opacity: 0.45; }
   .cell.selectable { cursor: pointer; }
-  .cell.partial { background: var(--warn-bg); color: var(--text); }
-  .cell.complete { background: var(--success); color: #fff; font-weight: 700; }
-  .cell.today { border-color: var(--accent); }
-  .cell.selected { box-shadow: 0 0 0 2px var(--accent) inset; }
+  .cell.partial { background: #fff1d6; color: #8a5a00; }
+  .cell.complete {
+    background: var(--flame-grad);
+    color: #fff;
+    font-weight: 800;
+    box-shadow: 0 6px 14px rgba(255,90,90,0.35);
+  }
+  .cell.today { border-color: #7657d6; }
+  .cell.selected { box-shadow: 0 0 0 2px #7657d6 inset; }
   .legend {
     display: flex;
     gap: 14px;
     margin-top: 14px;
     flex-wrap: wrap;
-    font-size: 0.78rem;
-    color: var(--muted);
+    font-size: 0.76rem;
+    color: var(--card-muted);
   }
-  .legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 3px;
-    display: inline-block;
-  }
-  .dot.empty { background: var(--empty-bg); border: 1px solid var(--border); }
-  .dot.partial { background: var(--warn-bg); }
-  .dot.complete { background: var(--success); }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .dot.empty { background: #f4f2fb; border: 1px solid var(--card-border); }
+  .dot.partial { background: #fff1d6; }
+  .dot.complete { background: var(--flame-grad); }
+
   .detail-panel-title {
+    font-weight: 800;
+    margin: 0 0 6px;
+    font-size: 0.92rem;
+    color: var(--card-muted);
+  }
+
+  .congrats { text-align: center; padding: 10px 0 4px; }
+  .congrats .big { font-size: 2.6rem; margin-bottom: 10px; }
+  .congrats .headline { font-size: 1.1rem; font-weight: 800; }
+  .congrats .sub { color: var(--card-muted); font-size: 0.88rem; margin-top: 6px; }
+
+  /* ---------- bottom nav ---------- */
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--nav-h);
+    display: flex;
+    justify-content: center;
+    padding: 0 16px calc(10px + env(safe-area-inset-bottom));
+    pointer-events: none;
+  }
+  .bottom-nav-inner {
+    pointer-events: auto;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    background: rgba(20, 14, 48, 0.78);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 22px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+    overflow: hidden;
+  }
+  .nav-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 13px 0 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--on-dark-faint);
+    font-size: 0.72rem;
     font-weight: 700;
-    margin: 0 0 12px;
-    font-size: 0.95rem;
-    color: var(--muted);
   }
-  .footer-actions {
-    text-align: center;
-    margin-top: 24px;
-  }
-  .congrats {
-    text-align: center;
-    padding: 12px 0;
-  }
-  .congrats .big {
-    font-size: 2.4rem;
-    margin-bottom: 8px;
-  }
+  .nav-btn .nav-ico { font-size: 1.25rem; line-height: 1; }
+  .nav-btn.active { color: #ffffff; }
+  .nav-btn.active .nav-ico { filter: drop-shadow(0 0 8px rgba(255,120,80,0.7)); }
 </style>
 </head>
 <body>
@@ -255,12 +379,13 @@
 
   var STORAGE_KEY = "workout-tracker-v1";
   var TOTAL_DAYS = 30;
+  var SVG_NS = "http://www.w3.org/2000/svg";
 
   var ITEMS = [
-    { key: "squat", emoji: "🏋️" },
-    { key: "weights", emoji: "💪" },
-    { key: "pullup", emoji: "🧗" },
-    { key: "walk", emoji: "🚶" }
+    { key: "squat", emoji: "🏋️", iconClass: "squat" },
+    { key: "weights", emoji: "💪", iconClass: "weights" },
+    { key: "pullup", emoji: "🧗", iconClass: "pullup" },
+    { key: "walk", emoji: "🚶", iconClass: "walk" }
   ];
 
   function loadState() {
@@ -281,6 +406,7 @@
 
   var state = loadState();
   var selectedDay = null;
+  var activeTab = "home"; // "home" | "calendar"
 
   function todayISO() {
     var d = new Date();
@@ -354,6 +480,15 @@
     return n;
   }
 
+  function getStreak(currentDayNum) {
+    var n = 0;
+    for (var d = currentDayNum; d >= 1; d--) {
+      if (countChecked(d) === ITEMS.length) n++;
+      else break;
+    }
+    return n;
+  }
+
   function toggleCheck(dayNum, itemKey) {
     var c = getDayChecks(dayNum);
     c[itemKey] = !c[itemKey];
@@ -363,7 +498,8 @@
 
   function startChallenge() {
     state = { startDate: todayISO(), checks: {} };
-    selectedDay = 1;
+    selectedDay = null;
+    activeTab = "home";
     saveState();
     render();
   }
@@ -372,6 +508,7 @@
     if (!confirm("정말 처음부터 다시 시작할까요? 지금까지의 체크 기록이 모두 사라집니다.")) return;
     state = { startDate: null, checks: {} };
     selectedDay = null;
+    activeTab = "home";
     saveState();
     render();
   }
@@ -390,43 +527,110 @@
     return e;
   }
 
-  function renderStartView(root) {
-    root.appendChild(el("h1", { text: "한달 운동 챌린지" }));
-    root.appendChild(el("p", { class: "sub", text: "30일간 꾸준히 실천하고 체크해보세요." }));
+  function svgEl(tag, attrs) {
+    var e = document.createElementNS(SVG_NS, tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    }
+    return e;
+  }
 
-    var planItems = [
-      "스쿼트 30개 (3일마다 5개씩 증가)",
-      "덤벨 · 케틀벨 운동 5분",
-      "철봉 매달리기 10초 × 3회 (3일마다 5초씩 증가)",
-      "칠천보 걷기"
+  function buildRing(fraction) {
+    var size = 180, stroke = 14, r = (size - stroke) / 2, c = size / 2;
+    var circumference = 2 * Math.PI * r;
+    var offset = circumference * (1 - Math.max(0, Math.min(1, fraction)));
+
+    var svg = svgEl("svg", { width: size, height: size, viewBox: "0 0 " + size + " " + size });
+    var defs = svgEl("defs");
+    var grad = svgEl("linearGradient", { id: "ringGrad", x1: "0%", y1: "0%", x2: "100%", y2: "100%" });
+    var s1 = svgEl("stop", { offset: "0%" }); s1.setAttribute("stop-color", "#ff9d4d");
+    var s2 = svgEl("stop", { offset: "100%" }); s2.setAttribute("stop-color", "#ff3d9e");
+    grad.appendChild(s1); grad.appendChild(s2);
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+
+    var track = svgEl("circle", {
+      cx: c, cy: c, r: r, fill: "none",
+      stroke: "rgba(255,255,255,0.16)", "stroke-width": stroke
+    });
+    var fg = svgEl("circle", {
+      cx: c, cy: c, r: r, fill: "none",
+      stroke: "url(#ringGrad)", "stroke-width": stroke,
+      "stroke-linecap": "round",
+      "stroke-dasharray": circumference,
+      "stroke-dashoffset": offset,
+      transform: "rotate(-90 " + c + " " + c + ")"
+    });
+    svg.appendChild(track);
+    svg.appendChild(fg);
+    return svg;
+  }
+
+  function renderTopBar(currentDayNum) {
+    var streak = getStreak(currentDayNum ? currentDayNum - (countChecked(currentDayNum) === ITEMS.length ? 0 : 1) : 0);
+    var chipChildren = [
+      el("span", { class: "flame", text: "🔥" }),
+      document.createTextNode(streak > 0 ? "연속 " + streak + "일" : "오늘부터 시작")
+    ];
+    return el("div", { class: "topbar" }, [
+      el("div", { class: "brand", text: "💪 한달 챌린지" }),
+      el("div", { class: "streak-chip" }, chipChildren)
+    ]);
+  }
+
+  function renderStartView(root) {
+    root.appendChild(el("h1", { class: "hero-title", text: "한달 운동 챌린지" }));
+    root.appendChild(el("p", { class: "hero-sub", text: "30일간 꾸준히 실천하고 체크해보세요." }));
+
+    var plan = [
+      { ico: "🏋️", cls: "squat", text: "스쿼트 30개 (3일마다 5개씩 증가)" },
+      { ico: "💪", cls: "weights", text: "덤벨 · 케틀벨 운동 5분" },
+      { ico: "🧗", cls: "pullup", text: "철봉 매달리기 10초 × 3회 (3일마다 5초씩 증가)" },
+      { ico: "🚶", cls: "walk", text: "칠천보 걷기" }
     ];
     var list = el("ul", { class: "plan-list" });
-    planItems.forEach(function (t) {
-      list.appendChild(el("li", { text: t }));
+    plan.forEach(function (p) {
+      var icoWrap = el("span", { class: "ico mission-ico " + p.cls, text: p.ico });
+      list.appendChild(el("li", {}, [icoWrap, el("span", { text: p.text })]));
     });
 
-    var card = el("div", { class: "card" }, [
-      el("div", { class: "mission-title", text: "한달 운동 플랜" }),
+    root.appendChild(el("div", { class: "card-light" }, [
+      el("div", { class: "section-title on-card", text: "한달 운동 플랜" }),
       list
-    ]);
-    root.appendChild(card);
+    ]));
 
-    var startBtn = el("button", { class: "btn-primary", text: "시작하기", onclick: startChallenge });
-    root.appendChild(el("div", { class: "card" }, [startBtn]));
+    root.appendChild(el("button", { class: "btn-cta", text: "시작하기", onclick: startChallenge }));
   }
 
   function renderCompleteView(root) {
-    root.appendChild(el("h1", { text: "한달 운동 챌린지" }));
+    root.appendChild(renderTopBar(TOTAL_DAYS));
     var completed = totalCompletedDays();
-    var card = el("div", { class: "card congrats" }, [
+    root.appendChild(el("div", { class: "card-light congrats" }, [
       el("div", { class: "big", text: "🎉" }),
-      el("div", { text: "30일 챌린지 완료!" }),
+      el("div", { class: "headline", text: "30일 챌린지 완료!" }),
       el("p", { class: "sub", text: "30일 중 " + completed + "일을 완벽하게 실천했어요." })
-    ]);
-    root.appendChild(card);
+    ]));
     root.appendChild(renderCalendarCard(TOTAL_DAYS));
-    var restartBtn = el("button", { class: "btn-primary", text: "새로운 챌린지 다시 시작", onclick: restartChallenge });
-    root.appendChild(el("div", { class: "card" }, [restartBtn]));
+    root.appendChild(el("button", { class: "btn-cta", text: "새로운 챌린지 다시 시작", onclick: restartChallenge }));
+  }
+
+  function buildMissionRow(dayNum, it, labels, checks, isEditable) {
+    var isDone = !!checks[it.key];
+    var cb = el("input", { type: "checkbox" });
+    cb.checked = isDone;
+    if (!isEditable) cb.disabled = true;
+    cb.addEventListener("change", function () { toggleCheck(dayNum, it.key); });
+
+    var label = el("label", { class: "hit" }, [
+      el("span", { class: "mission-ico " + it.iconClass, text: it.emoji }),
+      el("span", { class: "mission-text" }, [
+        el("span", { class: "label", text: labels[it.key] })
+      ]),
+      el("span", { class: "mission-check", text: "✓" })
+    ]);
+    label.insertBefore(cb, label.firstChild);
+
+    return el("div", { class: "mission-row" + (isDone ? " done" : "") + (isEditable ? "" : " disabled") }, [label]);
   }
 
   function renderMissionCard(dayNum, currentDayNum) {
@@ -435,39 +639,23 @@
     var doneCount = countChecked(dayNum);
     var isEditable = dayNum <= currentDayNum;
 
-    var title = dayNum === currentDayNum
-      ? "오늘의 미션"
-      : (dayNum + "일차 미션 (기록 수정)");
-
-    var header = el("div", { class: "detail-panel-title", text: title });
-    var box = el("div", {}, [header]);
+    var title = dayNum === currentDayNum ? "오늘의 미션" : (dayNum + "일차 미션 (기록 수정)");
+    var box = el("div", {}, [el("div", { class: "detail-panel-title", text: title })]);
 
     ITEMS.forEach(function (it) {
-      var isDone = !!checks[it.key];
-      var item = el("label", { class: "mission-item" + (isDone ? " done" : "") }, [
-        (function () {
-          var cb = el("input", { type: "checkbox" });
-          cb.checked = isDone;
-          if (!isEditable) cb.disabled = true;
-          cb.addEventListener("change", function () { toggleCheck(dayNum, it.key); });
-          return cb;
-        })(),
-        el("span", { class: "emoji", text: it.emoji }),
-        el("span", { class: "label", text: labels[it.key] })
-      ]);
-      box.appendChild(item);
+      box.appendChild(buildMissionRow(dayNum, it, labels, checks, isEditable));
     });
 
     if (doneCount === ITEMS.length) {
-      box.appendChild(el("span", { class: "all-done-badge", text: "오늘 완료! 잘하셨어요 👏" }));
+      box.appendChild(el("div", { class: "all-done-banner", text: "오늘 완료! 잘하셨어요 👏" }));
     }
 
-    return el("div", { class: "card" }, [box]);
+    return el("div", { class: "card-light" }, [box]);
   }
 
   function renderCalendarCard(currentDayNum) {
-    var card = el("div", { class: "card" });
-    card.appendChild(el("div", { class: "calendar-title", text: "이번 달 진행 상황" }));
+    var card = el("div", { class: "card-light" });
+    card.appendChild(el("div", { class: "section-title on-card", text: "이번 달 진행 상황" }));
 
     var grid = el("div", { class: "grid" });
     for (var d = 1; d <= TOTAL_DAYS; d++) {
@@ -487,7 +675,7 @@
       if (d <= currentDayNum) {
         cell.addEventListener("click", function (dayNum) {
           return function () {
-            selectedDay = dayNum;
+            selectedDay = (selectedDay === dayNum) ? null : dayNum;
             render();
           };
         }(d));
@@ -496,49 +684,96 @@
     }
     card.appendChild(grid);
 
-    var legend = el("div", { class: "legend" }, [
+    card.appendChild(el("div", { class: "legend" }, [
       el("span", {}, [el("span", { class: "dot empty" }), document.createTextNode("미완료")]),
       el("span", {}, [el("span", { class: "dot partial" }), document.createTextNode("일부 완료")]),
       el("span", {}, [el("span", { class: "dot complete" }), document.createTextNode("전체 완료")])
-    ]);
-    card.appendChild(legend);
+    ]));
 
     return card;
   }
 
-  function renderDashboard(root, currentDayNum) {
-    root.appendChild(el("h1", { text: "한달 운동 챌린지" }));
+  function renderHomeTab(root, currentDayNum) {
+    root.appendChild(renderTopBar(currentDayNum));
 
-    var progressCard = el("div", { class: "card" });
+    var checks = getDayChecks(currentDayNum);
+    var done = countChecked(currentDayNum);
+    var fraction = done / ITEMS.length;
     var d = dateForDay(currentDayNum);
-    progressCard.appendChild(el("div", { class: "progress-header" }, [
-      el("div", { class: "day", text: currentDayNum + "일차 / " + TOTAL_DAYS + "일" }),
-      el("div", { class: "date", text: formatDate(d) })
-    ]));
-    var pct = Math.round((currentDayNum - 1) / TOTAL_DAYS * 100);
-    var track = el("div", { class: "bar-track" }, [
-      el("div", { class: "bar-fill", style: "width:" + pct + "%" })
-    ]);
-    progressCard.appendChild(track);
-    progressCard.appendChild(el("div", {
-      class: "bar-label",
-      text: totalCompletedDays() + "일 완벽 실천 · " + pct + "% 진행"
-    }));
-    root.appendChild(progressCard);
 
-    var dayToShow = selectedDay && selectedDay <= currentDayNum ? selectedDay : currentDayNum;
-    root.appendChild(renderMissionCard(dayToShow, currentDayNum));
+    var ringWrap = el("div", { class: "ring-wrap" }, [buildRing(fraction)]);
+    ringWrap.appendChild(el("div", { class: "ring-center" }, [
+      el("div", { class: "ring-value", text: done + "/" + ITEMS.length },),
+      el("div", { class: "ring-caption", text: "오늘 완료" })
+    ]));
+
+    root.appendChild(el("div", { class: "ring-hero" }, [
+      ringWrap,
+      el("div", { class: "ring-daylabel", text: currentDayNum + "일차 · 30일 중" }),
+      el("div", { class: "ring-date", text: formatDate(d) })
+    ]));
+
+    var streak = getStreak(done === ITEMS.length ? currentDayNum : currentDayNum - 1);
+    if (streak > 0) {
+      root.appendChild(el("div", { class: "streak-banner" }, [
+        el("span", { class: "flame-big", text: "🔥" }),
+        el("div", {}, [
+          el("div", { class: "title", text: streak + "일 연속 완료!" }),
+          el("div", { class: "sub", text: "이 기세로 계속 가봐요" })
+        ])
+      ]));
+    }
+
+    root.appendChild(renderMissionCard(currentDayNum, currentDayNum));
+  }
+
+  function renderCalendarTab(root, currentDayNum) {
+    root.appendChild(renderTopBar(currentDayNum));
+
+    var pct = Math.round((currentDayNum - 1) / TOTAL_DAYS * 100);
+    root.appendChild(el("div", { class: "stats-row" }, [
+      el("div", { class: "stat-chip" }, [
+        el("div", { class: "num", text: totalCompletedDays() + "일" }),
+        el("div", { class: "lbl", text: "완벽 실천" })
+      ]),
+      el("div", { class: "stat-chip" }, [
+        el("div", { class: "num", text: pct + "%" }),
+        el("div", { class: "lbl", text: "챌린지 진행률" })
+      ])
+    ]));
+
     root.appendChild(renderCalendarCard(currentDayNum));
 
-    var footer = el("div", { class: "footer-actions" }, [
-      el("button", { class: "btn-secondary", text: "처음부터 다시 시작", onclick: restartChallenge })
+    if (selectedDay && selectedDay <= currentDayNum) {
+      root.appendChild(renderMissionCard(selectedDay, currentDayNum));
+    }
+
+    root.appendChild(el("button", { class: "btn-ghost", text: "처음부터 다시 시작", onclick: restartChallenge }));
+  }
+
+  function renderBottomNav() {
+    function navBtn(tab, icon, label) {
+      var btn = el("button", {
+        class: "nav-btn" + (activeTab === tab ? " active" : ""),
+        onclick: function () { activeTab = tab; render(); }
+      }, [
+        el("span", { class: "nav-ico", text: icon }),
+        el("span", { text: label })
+      ]);
+      return btn;
+    }
+    return el("div", { class: "bottom-nav" }, [
+      el("div", { class: "bottom-nav-inner" }, [
+        navBtn("home", "🏠", "홈"),
+        navBtn("calendar", "📅", "기록")
+      ])
     ]);
-    root.appendChild(footer);
   }
 
   function render() {
     var root = document.getElementById("app");
     root.innerHTML = "";
+    document.body.querySelectorAll(".bottom-nav").forEach(function (n) { n.remove(); });
 
     if (!state.startDate) {
       renderStartView(root);
@@ -551,8 +786,12 @@
       return;
     }
 
-    if (selectedDay === null) selectedDay = currentDayNum;
-    renderDashboard(root, currentDayNum);
+    if (activeTab === "calendar") {
+      renderCalendarTab(root, currentDayNum);
+    } else {
+      renderHomeTab(root, currentDayNum);
+    }
+    document.body.appendChild(renderBottomNav());
   }
 
   render();
