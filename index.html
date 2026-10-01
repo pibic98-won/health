@@ -16,7 +16,6 @@
     --card-border: #efedf7;
     --on-dark: #ffffff;
     --on-dark-muted: rgba(255,255,255,0.68);
-    --on-dark-faint: rgba(255,255,255,0.4);
     --glass: rgba(255,255,255,0.1);
     --glass-border: rgba(255,255,255,0.16);
     --flame-grad: linear-gradient(135deg, #ff9d4d 0%, #ff5d6e 55%, #ff3d9e 100%);
@@ -25,7 +24,6 @@
     --pink-grad: linear-gradient(135deg, #ff6fd8 0%, #ff3d9e 100%);
     --ring-track: rgba(255,255,255,0.16);
     --shadow-card: 0 12px 28px rgba(15, 8, 55, 0.35);
-    --nav-h: 76px;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; }
@@ -35,7 +33,7 @@
     background: radial-gradient(130% 70% at 8% -10%, #3c2f96 0%, #2a2177 42%, #160f3d 100%);
     color: var(--on-dark);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-    padding: 20px 16px calc(var(--nav-h) + 36px + env(safe-area-inset-bottom));
+    padding: 20px 16px calc(28px + env(safe-area-inset-bottom));
   }
   .wrap {
     max-width: 420px;
@@ -54,22 +52,20 @@
     font-size: 1.05rem;
     letter-spacing: -0.01em;
   }
-  .streak-chip {
+  .nav-toggle-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     background: var(--glass);
     border: 1px solid var(--glass-border);
-    padding: 7px 13px 7px 10px;
+    padding: 9px 16px;
     border-radius: 999px;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     font-weight: 700;
+    color: var(--on-dark);
     backdrop-filter: blur(6px);
   }
-  .streak-chip .flame {
-    filter: drop-shadow(0 0 6px rgba(255,120,70,0.85));
-    font-size: 0.95rem;
-  }
+  .nav-toggle-btn:active { background: rgba(255,255,255,0.2); }
 
   h1.hero-title {
     font-size: 1.5rem;
@@ -328,45 +324,6 @@
   .congrats .headline { font-size: 1.1rem; font-weight: 800; }
   .congrats .sub { color: var(--card-muted); font-size: 0.88rem; margin-top: 6px; }
 
-  /* ---------- bottom nav ---------- */
-  .bottom-nav {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    padding: 0 16px calc(14px + env(safe-area-inset-bottom));
-    pointer-events: none;
-  }
-  .bottom-nav-inner {
-    pointer-events: auto;
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    background: rgba(20, 14, 48, 0.78);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 22px;
-    backdrop-filter: blur(14px);
-    box-shadow: 0 14px 30px rgba(0,0,0,0.35);
-    overflow: hidden;
-  }
-  .nav-btn {
-    flex: 1;
-    background: transparent;
-    border: none;
-    padding: 13px 0 11px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    color: var(--on-dark-faint);
-    font-size: 0.72rem;
-    font-weight: 700;
-  }
-  .nav-btn .nav-ico { font-size: 1.25rem; line-height: 1; }
-  .nav-btn.active { color: #ffffff; }
-  .nav-btn.active .nav-ico { filter: drop-shadow(0 0 8px rgba(255,120,80,0.7)); }
 </style>
 </head>
 <body>
@@ -565,15 +522,20 @@
     return svg;
   }
 
-  function renderTopBar(currentDayNum) {
-    var streak = getStreak(currentDayNum ? currentDayNum - (countChecked(currentDayNum) === ITEMS.length ? 0 : 1) : 0);
-    var chipChildren = [
-      el("span", { class: "flame", text: "🔥" }),
-      document.createTextNode(streak > 0 ? "연속 " + streak + "일" : "오늘부터 시작")
-    ];
+  function renderTopBar(showToggle) {
+    var right = null;
+    if (showToggle) {
+      var goingTo = activeTab === "home" ? "calendar" : "home";
+      var label = activeTab === "home" ? "📅 기록" : "🏠 홈";
+      right = el("button", {
+        class: "nav-toggle-btn",
+        text: label,
+        onclick: function () { activeTab = goingTo; render(); }
+      });
+    }
     return el("div", { class: "topbar" }, [
       el("div", { class: "brand", text: "💪 한달 챌린지" }),
-      el("div", { class: "streak-chip" }, chipChildren)
+      right
     ]);
   }
 
@@ -602,7 +564,7 @@
   }
 
   function renderCompleteView(root) {
-    root.appendChild(renderTopBar(TOTAL_DAYS));
+    root.appendChild(renderTopBar(false));
     var completed = totalCompletedDays();
     root.appendChild(el("div", { class: "card-light congrats" }, [
       el("div", { class: "big", text: "🎉" }),
@@ -693,7 +655,7 @@
   }
 
   function renderHomeTab(root, currentDayNum) {
-    root.appendChild(renderTopBar(currentDayNum));
+    root.appendChild(renderTopBar(true));
 
     var checks = getDayChecks(currentDayNum);
     var done = countChecked(currentDayNum);
@@ -727,7 +689,7 @@
   }
 
   function renderCalendarTab(root, currentDayNum) {
-    root.appendChild(renderTopBar(currentDayNum));
+    root.appendChild(renderTopBar(true));
 
     var pct = Math.round((currentDayNum - 1) / TOTAL_DAYS * 100);
     root.appendChild(el("div", { class: "stats-row" }, [
@@ -750,29 +712,9 @@
     root.appendChild(el("button", { class: "btn-ghost", text: "처음부터 다시 시작", onclick: restartChallenge }));
   }
 
-  function renderBottomNav() {
-    function navBtn(tab, icon, label) {
-      var btn = el("button", {
-        class: "nav-btn" + (activeTab === tab ? " active" : ""),
-        onclick: function () { activeTab = tab; render(); }
-      }, [
-        el("span", { class: "nav-ico", text: icon }),
-        el("span", { text: label })
-      ]);
-      return btn;
-    }
-    return el("div", { class: "bottom-nav" }, [
-      el("div", { class: "bottom-nav-inner" }, [
-        navBtn("home", "🏠", "홈"),
-        navBtn("calendar", "📅", "기록")
-      ])
-    ]);
-  }
-
   function render() {
     var root = document.getElementById("app");
     root.innerHTML = "";
-    document.body.querySelectorAll(".bottom-nav").forEach(function (n) { n.remove(); });
 
     if (!state.startDate) {
       renderStartView(root);
@@ -790,7 +732,6 @@
     } else {
       renderHomeTab(root, currentDayNum);
     }
-    document.body.appendChild(renderBottomNav());
   }
 
   render();
